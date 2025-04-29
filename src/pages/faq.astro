@@ -1,0 +1,166 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HeroSection from '../components/HeroSection.astro';
+import CodeBlock from '../components/CodeBlock.astro';
+---
+
+<Layout title="FAQ - Weather ETL Pipeline Documentation">
+  <HeroSection
+    title="Frequently Asked Questions"
+    subtitle="Find answers to common questions about the Weather ETL Pipeline"
+  />
+
+  <div class="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+      
+      <!-- General Questions -->
+      <section class="mb-16">
+        <h2 class="text-2xl font-bold mb-6 text-cloud-900 dark:text-cloud-50">
+          General Questions
+        </h2>
+
+        <div class="space-y-6">
+          <div class="bg-white dark:bg-cloud-800 rounded-lg shadow-md p-6">
+            <h3 class="text-xl font-medium mb-3 text-cloud-900 dark:text-cloud-50">
+              What is the Weather ETL Pipeline?
+            </h3>
+            <p class="text-cloud-700 dark:text-cloud-300">
+              The Weather ETL Pipeline is a Python-based tool that extracts weather data from the OpenWeatherMap API, transforms it into a structured format, and loads it into a Supabase database for storage and analysis.
+            </p>
+          </div>
+
+          <div class="bg-white dark:bg-cloud-800 rounded-lg shadow-md p-6">
+            <h3 class="text-xl font-medium mb-3 text-cloud-900 dark:text-cloud-50">
+              What are the system requirements?
+            </h3>
+            <p class="text-cloud-700 dark:text-cloud-300">
+              The pipeline requires:
+            </p>
+            <ul class="list-disc pl-6 mt-2 space-y-2 text-cloud-700 dark:text-cloud-300">
+              <li>Python 3.8 or higher</li>
+              <li>OpenWeatherMap API key</li>
+              <li>Supabase account and project</li>
+              <li>Internet connection for API access</li>
+            </ul>
+          </div>
+
+          <div class="bg-white dark:bg-cloud-800 rounded-lg shadow-md p-6">
+            <h3 class="text-xl font-medium mb-3 text-cloud-900 dark:text-cloud-50">
+              Is the data collection automated?
+            </h3>
+            <p class="text-cloud-700 dark:text-cloud-300">
+              Yes, the pipeline can be configured to automatically collect weather data at specified intervals. You can set the <code>update_frequency</code> parameter in the configuration to control how often data is collected.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Technical Questions -->
+      <section class="mb-16">
+        <h2 class="text-2xl font-bold mb-6 text-cloud-900 dark:text-cloud-50">
+          Technical Questions
+        </h2>
+
+        <div class="space-y-6">
+          <div class="bg-white dark:bg-cloud-800 rounded-lg shadow-md p-6">
+            <h3 class="text-xl font-medium mb-3 text-cloud-900 dark:text-cloud-50">
+              How do I handle API rate limits?
+            </h3>
+            <p class="mb-4 text-cloud-700 dark:text-cloud-300">
+              The pipeline includes built-in rate limiting and retry mechanisms. Here's an example of configuring rate limits:
+            </p>
+            <CodeBlock language="python">
+from weather_etl import Config
+
+config = Config(
+    api_key="your_key",
+    rate_limit=60,  # calls per minute
+    retry_attempts=3,
+    retry_delay=5
+)
+            </CodeBlock>
+          </div>
+
+          <div class="bg-white dark:bg-cloud-800 rounded-lg shadow-md p-6">
+            <h3 class="text-xl font-medium mb-3 text-cloud-900 dark:text-cloud-50">
+              Can I customize the data transformation?
+            </h3>
+            <p class="mb-4 text-cloud-700 dark:text-cloud-300">
+              Yes, you can extend the <code>TransformStep</code> class to implement custom transformations:
+            </p>
+            <CodeBlock language="python">
+from weather_etl import TransformStep
+
+class CustomTransform(TransformStep):
+    def transform(self, data):
+        # Your custom transformation logic
+        transformed = super().transform(data)
+        
+        # Add custom fields
+        transformed['custom_field'] = self.calculate_custom_value(data)
+        
+        return transformed
+            </CodeBlock>
+          </div>
+
+          <div class="bg-white dark:bg-cloud-800 rounded-lg shadow-md p-6">
+            <h3 class="text-xl font-medium mb-3 text-cloud-900 dark:text-cloud-50">
+              How do I handle database migrations?
+            </h3>
+            <p class="mb-4 text-cloud-700 dark:text-cloud-300">
+              The pipeline uses Supabase migrations for database schema changes. Here's an example:
+            </p>
+            <CodeBlock language="sql">
+-- Create a new migration
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- Create weather_locations table
+CREATE TABLE weather_locations (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    city_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    country TEXT NOT NULL,
+    latitude FLOAT NOT NULL,
+    longitude FLOAT NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    active BOOLEAN DEFAULT true
+);
+
+-- Add indexes
+CREATE INDEX idx_weather_locations_city_id ON weather_locations(city_id);
+CREATE INDEX idx_weather_locations_active ON weather_locations(active);
+            </CodeBlock>
+          </div>
+        </div>
+      </section>
+
+      <!-- Troubleshooting -->
+      <section>
+        <h2 class="text-2xl font-bold mb-6 text-cloud-900 dark:text-cloud-50">
+          Troubleshooting
+        </h2>
+
+        <div class="space-y-6">
+          <div class="bg-white dark:bg-cloud-800 rounded-lg shadow-md p-6">
+            <h3 class="text-xl font-medium mb-3 text-cloud-900 dark:text-cloud-50">
+              What should I do if the API connection fails?
+            </h3>
+            <p class="text-cloud-700 dark:text-cloud-300">
+              First, check your API key and internet connection. The pipeline includes retry logic, but you may need to adjust the retry settings in your configuration. Also verify that you haven't exceeded your API rate limits.
+            </p>
+          </div>
+
+          <div class="bg-white dark:bg-cloud-800 rounded-lg shadow-md p-6">
+            <h3 class="text-xl font-medium mb-3 text-cloud-900 dark:text-cloud-50">
+              How do I debug issues in the pipeline?
+            </h3>
+            <p class="text-cloud-700 dark:text-cloud-300">
+              To debug the pipeline, enable verbose or debug-level logging in your configuration. This allows you to trace API calls, transformation steps, and database operations. You can also insert temporary <code>print()</code> statements or use Python’s <code>logging</code> module to monitor variable states and errors. If you're still stuck, check exception traces and retry logic settings for clues.
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</Layout>

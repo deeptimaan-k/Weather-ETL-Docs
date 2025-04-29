@@ -1,0 +1,37 @@
+---
+const navItems = [
+  { href: '/', label: 'Home' },
+  { href: '/installation', label: 'Installation' },
+  { href: '/architecture', label: 'Architecture' },
+  { href: '/api', label: 'API Reference' },
+  { href: '/examples', label: 'Examples' }
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<nav class="bg-white dark:bg-cloud-900 border-b border-cloud-200 dark:border-cloud-700">
+  <div class="container mx-auto px-4">
+    <div class="flex items-center justify-between h-16">
+      <a href="/" class="text-xl font-semibold text-sky-600 dark:text-sky-400">
+        Weather ETL Docs
+      </a>
+      
+      <div class="hidden md:flex md:items-center md:space-x-8">
+        {navItems.map(item => (
+          <a
+            href={item.href}
+            class:list={[
+              'text-sm font-medium transition-colors',
+              currentPath === item.href
+                ? 'text-sky-600 dark:text-sky-400'
+                : 'text-cloud-600 hover:text-cloud-900 dark:text-cloud-400 dark:hover:text-white'
+            ]}
+          >
+            {item.label}
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</nav>

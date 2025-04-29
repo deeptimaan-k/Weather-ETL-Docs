@@ -1,0 +1,94 @@
+---
+interface Props {
+  placeholder?: string;
+}
+
+const { placeholder = "Search documentation..." } = Astro.props;
+---
+
+<div class="relative w-full max-w-xl mx-auto">
+  <div class="relative">
+    <input
+      id="search-input"
+      type="text"
+      class="w-full py-2 pl-10 pr-4 rounded-lg border border-cloud-300 bg-white dark:bg-cloud-800 dark:border-cloud-700 text-cloud-900 dark:text-cloud-50 focus:outline-none focus:ring-2 focus:ring-sky-500 dark:focus:ring-sky-400"
+      placeholder={placeholder}
+    />
+    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-cloud-500 dark:text-cloud-400" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+      </svg>
+    </div>
+  </div>
+  
+  <div id="search-results" class="absolute left-0 right-0 mt-2 bg-white dark:bg-cloud-800 rounded-lg shadow-lg border border-cloud-200 dark:border-cloud-700 z-10 hidden">
+    <!-- Results will be inserted here by JavaScript -->
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('search-input');
+    const searchResults = document.getElementById('search-results');
+    
+    if (!searchInput || !searchResults) return;
+    
+    // Sample search data - in a real implementation, this would be generated from your documentation
+    const searchData = [
+      { title: 'Getting Started', url: '/installation', content: 'Learn how to install and set up the Weather ETL Pipeline.' },
+      { title: 'API Reference', url: '/api', content: 'Comprehensive API documentation for all modules and functions.' },
+      { title: 'Extract Module', url: '/architecture#extract', content: 'Details about the Extract module in the ETL pipeline.' },
+      { title: 'Transform Module', url: '/architecture#transform', content: 'Details about the Transform module in the ETL pipeline.' },
+      { title: 'Load Module', url: '/architecture#load', content: 'Details about the Load module in the ETL pipeline.' },
+      { title: 'Configuration', url: '/examples#configuration', content: 'Learn how to configure the Weather ETL Pipeline.' },
+      { title: 'Troubleshooting', url: '/faq', content: 'Solutions to common issues and problems.' }
+    ];
+    
+    // Simple search implementation
+    searchInput.addEventListener('input', () => {
+      const query = searchInput.value.toLowerCase().trim();
+      
+      if (query.length < 2) {
+        searchResults.classList.add('hidden');
+        return;
+      }
+      
+      // Filter results based on the query
+      const filteredResults = searchData.filter(item => 
+        item.title.toLowerCase().includes(query) || 
+        item.content.toLowerCase().includes(query)
+      );
+      
+      // Update the results UI
+      if (filteredResults.length > 0) {
+        searchResults.innerHTML = filteredResults.map(result => `
+          <a href="${result.url}" class="block px-4 py-3 hover:bg-cloud-100 dark:hover:bg-cloud-700 border-b border-cloud-200 dark:border-cloud-700 last:border-b-0">
+            <h4 class="text-base font-medium text-cloud-900 dark:text-cloud-50">${highlight(result.title, query)}</h4>
+            <p class="text-sm text-cloud-600 dark:text-cloud-400">${highlight(result.content, query)}</p>
+          </a>
+        `).join('');
+        searchResults.classList.remove('hidden');
+      } else {
+        searchResults.innerHTML = `
+          <div class="px-4 py-3 text-cloud-600 dark:text-cloud-400">
+            No results found for "${query}"
+          </div>
+        `;
+        searchResults.classList.remove('hidden');
+      }
+    });
+    
+    // Hide results when clicking outside
+    document.addEventListener('click', (event) => {
+      if (!searchInput.contains(event.target as Node) && !searchResults.contains(event.target as Node)) {
+        searchResults.classList.add('hidden');
+      }
+    });
+    
+    // Helper to highlight matching text
+    function highlight(text, query) {
+      const regex = new RegExp(`(${query})`, 'gi');
+      return text.replace(regex, '<span class="bg-sky-100 text-sky-800 dark:bg-sky-900 dark:text-sky-200">$1</span>');
+    }
+  });
+</script>

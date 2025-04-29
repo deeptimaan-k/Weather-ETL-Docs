@@ -1,0 +1,121 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HeroSection from '../components/HeroSection.astro';
+import FeatureCard from '../components/FeatureCard.astro';
+import WeatherChart from '../components/WeatherChart';
+import { GithubLogo } from '@phosphor-icons/react';
+
+const features = [
+  {
+    title: "Real-time Weather Data",
+    description: "Fetch current weather conditions from OpenWeatherMap API with automated error handling and retry mechanisms.",
+    icon: "api"
+  },
+  {
+    title: "Intelligent Processing",
+    description: "Transform raw data into structured formats using Pandas with built-in data validation and cleaning.",
+    icon: "transform"
+  },
+  {
+    title: "Cloud Storage",
+    description: "Store processed weather data in Supabase PostgreSQL with automatic backups and data versioning.",
+    icon: "database"
+  },
+  {
+    title: "Automated Pipeline",
+    description: "Schedule automated data collection with configurable intervals and monitoring.",
+    icon: "settings"
+  },
+  {
+    title: "Data Visualization",
+    description: "Generate insights with built-in charting and reporting capabilities.",
+    icon: "chart"
+  },
+  {
+    title: "Developer Friendly",
+    description: "Well-documented codebase with type hints and comprehensive test coverage.",
+    icon: "code"
+  }
+];
+---
+
+<Layout>
+  <HeroSection
+    title="Weather ETL Pipeline"
+    subtitle="A robust Python-based ETL system for collecting, processing, and analyzing weather data using OpenWeatherMap API and Supabase"
+    ctaText="Get Started"
+    ctaLink="/docs"
+    secondaryCtaText="View on GitHub"
+    secondaryCtaLink="https://github.com/deeptimaan-k/openweather-etl-system"
+  />
+
+  <div class="container mx-auto px-4 py-16">
+    <!-- GitHub Stats -->
+    <div class="flex justify-center mb-16">
+      <div class="flex flex-wrap gap-4 items-center">
+        <a href="https://github.com/deeptimaan-k/openweather-etl-system/stargazers" 
+           class="inline-flex items-center px-4 py-2 bg-cloud-100 dark:bg-cloud-800 rounded-full text-sm font-medium hover:bg-cloud-200 dark:hover:bg-cloud-700 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          Star
+        </a>
+        <a href="https://github.com/deeptimaan-k/openweather-etl-system/network/members"
+           class="inline-flex items-center px-4 py-2 bg-cloud-100 dark:bg-cloud-800 rounded-full text-sm font-medium hover:bg-cloud-200 dark:hover:bg-cloud-700 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-sky-500" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M7.707 3.293a1 1 0 010 1.414L5.414 7H11a7 7 0 017 7v2a1 1 0 11-2 0v-2a5 5 0 00-5-5H5.414l2.293 2.293a1 1 0 11-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+          </svg>
+          Fork
+        </a>
+        <a href="https://github.com/deeptimaan-k/openweather-etl-system/issues"
+           class="inline-flex items-center px-4 py-2 bg-cloud-100 dark:bg-cloud-800 rounded-full text-sm font-medium hover:bg-cloud-200 dark:hover:bg-cloud-700 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-purple-500" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+          </svg>
+          Issues
+        </a>
+      </div>
+    </div>
+
+    <!-- Features Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {features.map(feature => (
+        <FeatureCard
+          title={feature.title}
+          description={feature.description}
+          icon={feature.icon}
+        />
+      ))}
+    </div>
+
+    <!-- Demo Chart -->
+    <div class="mt-20">
+      <h2 class="text-3xl font-bold text-center mb-8">Live Weather Data Visualization</h2>
+      <div class="max-w-4xl mx-auto">
+        <WeatherChart client:load />
+      </div>
+    </div>
+
+    <!-- Quick Start -->
+    <div class="mt-20">
+      <h2 class="text-3xl font-bold text-center mb-12">Quick Start Guide</h2>
+      <div class="max-w-2xl mx-auto bg-white dark:bg-cloud-800 rounded-xl shadow-lg overflow-hidden">
+        <div class="p-8">
+          <div class="flex items-center mb-6">
+            <div class="h-10 w-10 rounded-full bg-sky-100 dark:bg-sky-900 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-sky-600 dark:text-sky-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <h3 class="ml-4 text-xl font-semibold">Installation</h3>
+          </div>
+          <div class="bg-cloud-50 dark:bg-cloud-900 rounded-lg p-4">
+            <pre class="text-sm overflow-x-auto"><code>git clone https://github.com/deeptimaan-k/openweather-etl-system.git
+cd openweather-etl-system
+pip install -r requirements.txt</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

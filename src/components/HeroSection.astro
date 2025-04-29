@@ -1,0 +1,81 @@
+---
+interface Props {
+  title: string;
+  subtitle: string;
+  ctaText?: string;
+  ctaLink?: string;
+  secondaryCtaText?: string;
+  secondaryCtaLink?: string;
+}
+
+const { 
+  title, 
+  subtitle, 
+  ctaText, 
+  ctaLink = '#', 
+  secondaryCtaText, 
+  secondaryCtaLink = '#' 
+} = Astro.props;
+---
+
+<section class="relative overflow-hidden py-16 sm:py-24">
+  <!-- Background Pattern -->
+  <div class="absolute inset-0 z-0 opacity-30 dark:opacity-10">
+    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+      <defs>
+        <pattern id="dots" width="30" height="30" patternUnits="userSpaceOnUse">
+          <circle cx="2" cy="2" r="1" fill="currentColor" class="text-sky-500 dark:text-sky-700" />
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#dots)" />
+    </svg>
+  </div>
+
+  <!-- Animated clouds (only shown on larger screens) -->
+  <div class="absolute hidden sm:block sm:top-24 left-8 animate-gentle-float">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-cloud-200 dark:text-cloud-800" viewBox="0 0 20 20" fill="currentColor">
+      <path d="M5.5 16a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 16h-8z" />
+    </svg>
+  </div>
+  <div class="absolute hidden sm:block sm:top-16 right-12 animate-gentle-float animation-delay-1000">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-cloud-300 dark:text-cloud-700" viewBox="0 0 20 20" fill="currentColor">
+      <path d="M5.5 16a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 16h-8z" />
+    </svg>
+  </div>
+  
+  <div class="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-3xl text-center">
+      <!-- Main heading with gradient text -->
+      <h1 class="animate-fade-in">
+        <span class="bg-gradient-to-r from-sky-600 to-sky-400 dark:from-sky-500 dark:to-sky-300 bg-clip-text text-transparent">
+          {title}
+        </span>
+      </h1>
+      
+      <!-- Subtitle -->
+      <p class="mt-6 text-lg text-cloud-600 dark:text-cloud-400 animate-slide-up">
+        {subtitle}
+      </p>
+      
+      <!-- CTA buttons -->
+      {(ctaText || secondaryCtaText) && (
+        <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up" style="animation-delay: 100ms;">
+          {ctaText && (
+            <a href={ctaLink} class="btn btn-primary px-6 py-3 shadow-lg hover:shadow-xl">
+              {ctaText}
+            </a>
+          )}
+          
+          {secondaryCtaText && (
+            <a href={secondaryCtaLink} class="btn btn-outline px-6 py-3">
+              {secondaryCtaText}
+              <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </a>
+          )}
+        </div>
+      )}
+    </div>
+  </div>
+</section>

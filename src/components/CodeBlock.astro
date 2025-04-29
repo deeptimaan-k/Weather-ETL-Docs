@@ -1,0 +1,75 @@
+---
+interface Props {
+  language?: string;
+  filename?: string;
+  copyable?: boolean;
+}
+
+const { language = 'python', filename, copyable = true } = Astro.props;
+---
+
+<div class="code-block relative rounded-lg overflow-hidden mb-6 group">
+  {filename && (
+    <div class="bg-cloud-200 dark:bg-cloud-700 text-cloud-700 dark:text-cloud-300 text-xs px-4 py-2 font-mono border-b border-cloud-300 dark:border-cloud-600">
+      {filename}
+    </div>
+  )}
+  
+  <pre class:list={[
+    `language-${language}`,
+    'my-0 overflow-x-auto text-sm leading-relaxed',
+    'bg-cloud-100 dark:bg-cloud-800 text-cloud-900 dark:text-cloud-100',
+    'border border-cloud-200 dark:border-cloud-700',
+    filename ? 'rounded-t-none' : 'rounded-lg'
+  ]}>
+    <code class={`language-${language} overflow-x-auto`}>
+      <slot />
+    </code>
+  </pre>
+  
+  {copyable && (
+    <button 
+      class="copy-btn absolute right-2 top-2 p-2 rounded-md bg-cloud-200/80 dark:bg-cloud-700/80 text-cloud-700 dark:text-cloud-300 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
+      aria-label="Copy code"
+      title="Copy code"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 copy-icon" viewBox="0 0 20 20" fill="currentColor">
+        <path d="M7 9a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9z" />
+        <path d="M5 3a2 2 0 00-2 2v6a2 2 0 002 2V5h8a2 2 0 00-2-2H5z" />
+      </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden check-icon" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+      </svg>
+    </button>
+  )}
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const copyButtons = document.querySelectorAll('.copy-btn');
+    
+    copyButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const pre = button.closest('.code-block')?.querySelector('pre');
+        if (!pre) return;
+        
+        const code = pre.textContent || '';
+        
+        navigator.clipboard.writeText(code.trim()).then(() => {
+          const copyIcon = button.querySelector('.copy-icon');
+          const checkIcon = button.querySelector('.check-icon');
+          
+          if (copyIcon && checkIcon) {
+            copyIcon.classList.add('hidden');
+            checkIcon.classList.remove('hidden');
+            
+            setTimeout(() => {
+              copyIcon.classList.remove('hidden');
+              checkIcon.classList.add('hidden');
+            }, 2000);
+          }
+        });
+      });
+    });
+  });
+</script>

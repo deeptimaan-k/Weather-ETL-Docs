@@ -1,0 +1,61 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HeroSection from '../components/HeroSection.astro';
+import CodeBlock from '../components/CodeBlock.astro';
+---
+
+<Layout title="Examples - Weather ETL Pipeline">
+  <HeroSection
+    title="Examples"
+    subtitle="Explore practical examples of using the Weather ETL Pipeline"
+  />
+
+  <div class="container mx-auto px-4 py-12">
+    <div class="space-y-12">
+      <section>
+        <h2 class="text-2xl font-bold mb-6">Basic Example</h2>
+        <div class="card">
+          <CodeBlock language="typescript">
+{`import { WeatherETL } from 'weather-etl';
+
+// Initialize ETL
+const etl = new WeatherETL({
+  apiKey: process.env.WEATHER_API_KEY,
+  locations: ['London,UK']
+});
+
+// Run ETL process
+await etl.run();`}
+          </CodeBlock>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-bold mb-6">Advanced Example</h2>
+        <div class="card">
+          <CodeBlock language="typescript">
+{`import { WeatherETL, Transform } from 'weather-etl';
+
+// Custom transformer
+class CustomTransform extends Transform {
+  transform(data) {
+    const transformed = super.transform(data);
+    transformed.customField = this.calculateCustomValue(data);
+    return transformed;
+  }
+}
+
+// Initialize ETL with custom transformer
+const etl = new WeatherETL({
+  apiKey: process.env.WEATHER_API_KEY,
+  locations: ['London,UK'],
+  transformer: new CustomTransform()
+});
+
+await etl.run();`}
+          </CodeBlock>
+        </div>
+      </section>
+    </div>
+  </div>
+</Layout>

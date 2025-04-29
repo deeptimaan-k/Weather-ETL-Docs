@@ -1,0 +1,101 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HeroSection from '../components/HeroSection.astro';
+import CodeBlock from '../components/CodeBlock.astro';
+import StepProgress from '../components/StepProgress.astro';
+
+const installSteps = [
+  {
+    title: "Setup Environment",
+    description: "Create a Python virtual environment and install dependencies"
+  },
+  {
+    title: "Configure API Keys",
+    description: "Set up your OpenWeatherMap and Supabase credentials"
+  },
+  {
+    title: "Initialize Database",
+    description: "Create the weather_data table in Supabase"
+  },
+  {
+    title: "Run Pipeline",
+    description: "Execute your first ETL pipeline run"
+  }
+];
+---
+
+<Layout title="Installation - Weather ETL Pipeline">
+  <HeroSection
+    title="Installation & Setup"
+    subtitle="Get started with the Weather ETL Pipeline in a few simple steps"
+  />
+
+  <div class="container mx-auto px-4 py-12">
+    <StepProgress steps={installSteps} currentStep={1} />
+
+    <div class="mt-12 space-y-8">
+      <section>
+        <h2 class="text-2xl font-bold mb-6">Prerequisites</h2>
+        <div class="card">
+          <ul class="list-disc pl-6 space-y-2">
+            <li>Python 3.8 or higher</li>
+            <li>OpenWeatherMap API key</li>
+            <li>Supabase account and project</li>
+            <li>pip (Python package installer)</li>
+          </ul>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-bold mb-6">Installation</h2>
+        <div class="card">
+          <CodeBlock language="bash">
+# Create and activate virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt</CodeBlock>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-bold mb-6">Environment Setup</h2>
+        <div class="card">
+          <CodeBlock language="bash">
+# .env file
+OPENWEATHER_API_KEY=your_api_key_here
+DB_HOST=your_supabase_db_host
+DB_PORT=6543
+DB_NAME=your_supabase_db_name
+DB_USER=your_supabase_db_user
+DB_PASSWORD=your_supabase_db_password</CodeBlock>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-bold mb-6">Database Setup</h2>
+        <div class="card">
+          <CodeBlock language="sql">
+CREATE TABLE weather_data (
+    id SERIAL PRIMARY KEY,
+    city_name VARCHAR(100),
+    temperature FLOAT,
+    humidity INTEGER,
+    weather_description VARCHAR(255),
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);</CodeBlock>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-bold mb-6">Running the Pipeline</h2>
+        <div class="card">
+          <CodeBlock language="python">
+# Run the ETL pipeline
+python etl_pipeline.py</CodeBlock>
+        </div>
+      </section>
+    </div>
+  </div>
+</Layout>

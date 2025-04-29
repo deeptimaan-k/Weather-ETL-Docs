@@ -1,0 +1,71 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HeroSection from '../components/HeroSection.astro';
+import EtlDiagram from '../components/EtlDiagram';
+import CodeBlock from '../components/CodeBlock.astro';
+---
+
+<Layout title="Architecture - Weather ETL Pipeline">
+  <HeroSection
+    title="Architecture"
+    subtitle="Understanding the Weather ETL Pipeline architecture"
+  />
+
+  <div class="container mx-auto px-4 py-12">
+    <div class="mb-12">
+      <EtlDiagram client:load />
+    </div>
+
+    <div class="space-y-12">
+      <section>
+        <h2 class="text-2xl font-bold mb-6">Extract Module</h2>
+        <div class="card">
+          <p class="mb-4">The Extract module handles data retrieval from OpenWeatherMap API:</p>
+          <CodeBlock language="typescript" filename="extractor.ts">
+{`class WeatherExtractor {
+  async extract(location: string) {
+    const response = await this.api.getCurrentWeather(location);
+    return this.validateResponse(response);
+  }
+}`}
+          </CodeBlock>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-bold mb-6">Transform Module</h2>
+        <div class="card">
+          <p class="mb-4">The Transform module processes and cleanses the data:</p>
+          <CodeBlock language="typescript" filename="transformer.ts">
+{`class WeatherTransformer {
+  transform(data: RawWeatherData) {
+    return {
+      temperature: data.main.temp,
+      humidity: data.main.humidity,
+      pressure: data.main.pressure,
+      timestamp: new Date(data.dt * 1000)
+    };
+  }
+}`}
+          </CodeBlock>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-bold mb-6">Load Module</h2>
+        <div class="card">
+          <p class="mb-4">The Load module handles data storage in Supabase:</p>
+          <CodeBlock language="typescript" filename="loader.ts">
+{`class WeatherLoader {
+  async load(data: TransformedWeatherData) {
+    return await this.supabase
+      .from('weather_data')
+      .insert(data);
+  }
+}`}
+          </CodeBlock>
+        </div>
+      </section>
+    </div>
+  </div>
+</Layout>

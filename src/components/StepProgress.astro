@@ -1,0 +1,56 @@
+---
+interface Step {
+  title: string;
+  description: string;
+}
+
+interface Props {
+  steps: Step[];
+  currentStep?: number;
+}
+
+const { steps, currentStep = 1 } = Astro.props;
+---
+
+<div class="step-progress-container my-8">
+  <div class="flex flex-col md:flex-row gap-4">
+    {steps.map((step, index) => (
+      <div class="step-item flex-1">
+        <div class="flex items-start">
+          <div class:list={[
+            "step-number flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center font-medium text-lg transition-colors",
+            index + 1 <= currentStep 
+              ? "bg-sky-500 text-white" 
+              : "bg-cloud-200 text-cloud-600 dark:bg-cloud-700 dark:text-cloud-400"
+          ]}>
+            {index + 1}
+          </div>
+          
+          <div class="ml-4">
+            <h4 class="text-lg font-medium text-cloud-900 dark:text-cloud-50">{step.title}</h4>
+            <p class="mt-1 text-sm text-cloud-600 dark:text-cloud-400">{step.description}</p>
+          </div>
+        </div>
+        
+        {index < steps.length - 1 && (
+          <div class="step-connector ml-5 h-8 w-0.5 bg-cloud-200 dark:bg-cloud-700 md:hidden"></div>
+        )}
+      </div>
+    ))}
+  </div>
+  
+  <div class="hidden md:flex items-center mt-4">
+    <div class:list={[
+      "h-1 flex-1 rounded",
+      currentStep > 1 ? "bg-sky-500" : "bg-cloud-200 dark:bg-cloud-700"
+    ]}></div>
+    <div class:list={[
+      "h-1 flex-1 rounded",
+      currentStep > 2 ? "bg-sky-500" : "bg-cloud-200 dark:bg-cloud-700"
+    ]}></div>
+    <div class:list={[
+      "h-1 flex-1 rounded",
+      currentStep > 3 ? "bg-sky-500" : "bg-cloud-200 dark:bg-cloud-700"
+    ]}></div>
+  </div>
+</div>

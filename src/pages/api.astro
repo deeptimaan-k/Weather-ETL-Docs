@@ -2,195 +2,196 @@
 import Layout from '../layouts/Layout.astro';
 import HeroSection from '../components/HeroSection.astro';
 import CodeBlock from '../components/CodeBlock.astro';
-
+import WeatherChart from '../components/WeatherChart';
 ---
 
 <Layout title="API Reference - Weather ETL Pipeline Documentation">
   <HeroSection
     title="API Reference"
-    subtitle="Complete documentation of the Weather ETL Pipeline API"
+    subtitle="Complete documentation of the Weather ETL Pipeline API with examples and best practices"
   />
 
   <div class="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
+    <!-- Introduction -->
     <section class="mb-16">
-      <h2 class="text-2xl font-bold mb-6 text-cloud-900 dark:text-cloud-50">
-        Core API
-      </h2>
+      <div class="bg-white dark:bg-cloud-800 rounded-lg shadow-md p-6 mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-cloud-900 dark:text-cloud-50">
+          Overview
+        </h2>
+        <p class="text-cloud-700 dark:text-cloud-300 mb-4">
+          The Weather ETL Pipeline API provides a robust interface for extracting, transforming, and loading weather data. This reference guide covers all available classes, methods, and configuration options.
+        </p>
+        <div class="bg-sky-50 dark:bg-sky-900/30 rounded-lg p-4">
+          <h4 class="text-lg font-medium text-sky-900 dark:text-sky-100 mb-2">🚀 Quick Start</h4>
+          <p class="text-sky-800 dark:text-sky-200">
+            Begin by installing the package and setting up your environment variables. Then use the WeatherETL class to start collecting data.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Core API -->
+    <section class="mb-16">
+      <h2 class="text-2xl font-bold mb-6 text-cloud-900 dark:text-cloud-50">Core API</h2>
 
       <div class="space-y-8">
         <!-- WeatherETL Class -->
         <div class="bg-white dark:bg-cloud-800 rounded-lg shadow-md p-6">
-          <h3 class="text-xl font-medium mb-4 text-cloud-900 dark:text-cloud-50">
-            WeatherETL
-          </h3>
-          
+          <h3 class="text-xl font-medium mb-4 text-cloud-900 dark:text-cloud-50">WeatherETL</h3>
           <p class="mb-4 text-cloud-700 dark:text-cloud-300">
-            The main class for handling the ETL pipeline operations.
+            The main class for handling the ETL pipeline operations. It provides methods for data extraction, transformation, and loading.
           </p>
 
-          <CodeBlock language="python" filename="example.py">
-from weather_etl import WeatherETL
+          <div class="mb-6">
+            <h4 class="text-lg font-medium mb-2 text-cloud-900 dark:text-cloud-50">Installation</h4>
+            <CodeBlock language="bash">
+              npm install weather-etl
+            </CodeBlock>
+          </div>
 
-# Initialize the ETL pipeline
-etl = WeatherETL(config)
+          <div class="mb-6">
+            <h4 class="text-lg font-medium mb-2 text-cloud-900 dark:text-cloud-50">Basic Usage</h4>
+            <CodeBlock language="typescript">
+{`import { WeatherETL } from 'weather-etl';
 
-# Run the complete ETL process
-results = etl.run()
+// Initialize the ETL pipeline
+const etl = new WeatherETL({
+  apiKey: process.env.OPENWEATHER_API_KEY,
+  locations: ['London,UK', 'New York,US'],
+  updateInterval: 3600
+});
 
-# Or run individual steps
-data = etl.extract_data("London,UK")
-transformed = etl.transform_data(data)
-success = etl.load_data(transformed)
-          </CodeBlock>
+// Run the complete ETL process
+const results = await etl.run();
 
-          <h4 class="text-lg font-medium mt-6 mb-3 text-cloud-900 dark:text-cloud-50">
-            Methods
-          </h4>
+// Or run individual steps
+const data = await etl.extract('London,UK');
+const transformed = await etl.transform(data);
+const success = await etl.load(transformed);`}
+            </CodeBlock>
+          </div>
 
-          <div class="space-y-4">
-            <div>
+          <h4 class="text-lg font-medium mt-6 mb-3 text-cloud-900 dark:text-cloud-50">Methods</h4>
+          <div class="space-y-6">
+            <div class="border-b border-cloud-200 dark:border-cloud-700 pb-4">
               <h5 class="font-medium text-cloud-900 dark:text-cloud-50">run()</h5>
-              <p class="text-cloud-700 dark:text-cloud-300">
-                Executes the complete ETL pipeline for all configured locations.
-              </p>
+              <p class="text-cloud-700 dark:text-cloud-300 mb-2">Executes the complete ETL pipeline for all configured locations.</p>
+              <CodeBlock language="typescript">
+{`const results = await etl.run();`}
+              </CodeBlock>
+            </div>
+
+            <div class="border-b border-cloud-200 dark:border-cloud-700 pb-4">
+              <h5 class="font-medium text-cloud-900 dark:text-cloud-50">extract(location: string)</h5>
+              <p class="text-cloud-700 dark:text-cloud-300 mb-2">Retrieves weather data for a specific location from OpenWeatherMap API.</p>
+              <CodeBlock language="typescript">
+{`const data = await etl.extract('London,UK');`}
+              </CodeBlock>
+            </div>
+
+            <div class="border-b border-cloud-200 dark:border-cloud-700 pb-4">
+              <h5 class="font-medium text-cloud-900 dark:text-cloud-50">transform(data: WeatherData)</h5>
+              <p class="text-cloud-700 dark:text-cloud-300 mb-2">Transforms raw weather data into a structured format.</p>
+              <CodeBlock language="typescript">
+{`const transformed = await etl.transform(rawData);`}
+              </CodeBlock>
             </div>
 
             <div>
-              <h5 class="font-medium text-cloud-900 dark:text-cloud-50">extract_data(location: str)</h5>
-              <p class="text-cloud-700 dark:text-cloud-300">
-                Retrieves weather data for a specific location from OpenWeatherMap API.
-              </p>
-            </div>
-
-            <div>
-              <h5 class="font-medium text-cloud-900 dark:text-cloud-50">transform_data(data: dict)</h5>
-              <p class="text-cloud-700 dark:text-cloud-300">
-                Transforms raw weather data into a structured format.
-              </p>
-            </div>
-
-            <div>
-              <h5 class="font-medium text-cloud-900 dark:text-cloud-50">load_data(data: dict)</h5>
-              <p class="text-cloud-700 dark:text-cloud-300">
-                Loads transformed data into the Supabase database.
-              </p>
+              <h5 class="font-medium text-cloud-900 dark:text-cloud-50">load(data: TransformedData)</h5>
+              <p class="text-cloud-700 dark:text-cloud-300 mb-2">Loads transformed data into the Supabase database.</p>
+              <CodeBlock language="typescript">
+{`const success = await etl.load(transformedData);`}
+              </CodeBlock>
             </div>
           </div>
         </div>
 
-        <!-- Config Class -->
+        <!-- Configuration -->
         <div class="bg-white dark:bg-cloud-800 rounded-lg shadow-md p-6">
-          <h3 class="text-xl font-medium mb-4 text-cloud-900 dark:text-cloud-50">
-            Config
-          </h3>
-          
-          <p class="mb-4 text-cloud-700 dark:text-cloud-300">
-            Configuration class for setting up the ETL pipeline.
-          </p>
+          <h3 class="text-xl font-medium mb-4 text-cloud-900 dark:text-cloud-50">Configuration</h3>
+          <p class="mb-4 text-cloud-700 dark:text-cloud-300">The configuration options for setting up the ETL pipeline.</p>
 
-          <CodeBlock language="python" filename="example.py">
-from weather_etl import Config
+          <CodeBlock language="typescript">
+{`import { WeatherETL, Config } from 'weather-etl';
 
-config = Config(
-    api_key="your_openweathermap_api_key",
-    supabase_url="your_supabase_url",
-    supabase_key="your_supabase_key",
-    locations=["London,UK", "New York,US"],
-    update_frequency=3600
-)
+const config: Config = {
+  apiKey: process.env.OPENWEATHER_API_KEY,
+  supabaseUrl: process.env.SUPABASE_URL,
+  supabaseKey: process.env.SUPABASE_KEY,
+  locations: ['London,UK', 'New York,US'],
+  updateInterval: 3600,
+  logLevel: 'info',
+  retryAttempts: 3,
+  timeout: 5000
+};
+
+const etl = new WeatherETL(config);`}
           </CodeBlock>
 
-          <h4 class="text-lg font-medium mt-6 mb-3 text-cloud-900 dark:text-cloud-50">
-            Parameters
-          </h4>
-
+          <h4 class="text-lg font-medium mt-6 mb-3 text-cloud-900 dark:text-cloud-50">Configuration Options</h4>
           <div class="space-y-4">
             <div>
-              <h5 class="font-medium text-cloud-900 dark:text-cloud-50">api_key: str</h5>
-              <p class="text-cloud-700 dark:text-cloud-300">
-                Your OpenWeatherMap API key.
-              </p>
+              <h5 class="font-medium text-cloud-900 dark:text-cloud-50">apiKey: string</h5>
+              <p class="text-cloud-700 dark:text-cloud-300">Your OpenWeatherMap API key.</p>
             </div>
-
             <div>
-              <h5 class="font-medium text-cloud-900 dark:text-cloud-50">supabase_url: str</h5>
-              <p class="text-cloud-700 dark:text-cloud-300">
-                Your Supabase project URL.
-              </p>
+              <h5 class="font-medium text-cloud-900 dark:text-cloud-50">supabaseUrl: string</h5>
+              <p class="text-cloud-700 dark:text-cloud-300">Your Supabase project URL.</p>
             </div>
-
             <div>
-              <h5 class="font-medium text-cloud-900 dark:text-cloud-50">supabase_key: str</h5>
-              <p class="text-cloud-700 dark:text-cloud-300">
-                Your Supabase API key.
-              </p>
+              <h5 class="font-medium text-cloud-900 dark:text-cloud-50">supabaseKey: string</h5>
+              <p class="text-cloud-700 dark:text-cloud-300">Your Supabase API key.</p>
             </div>
-
             <div>
-              <h5 class="font-medium text-cloud-900 dark:text-cloud-50">locations: List[str]</h5>
-              <p class="text-cloud-700 dark:text-cloud-300">
-                List of locations to monitor (format: "City,CountryCode").
-              </p>
+              <h5 class="font-medium text-cloud-900 dark:text-cloud-50">locations: string[]</h5>
+              <p class="text-cloud-700 dark:text-cloud-300">List of locations to monitor (format: "City,CountryCode").</p>
             </div>
-
             <div>
-              <h5 class="font-medium text-cloud-900 dark:text-cloud-50">update_frequency: int</h5>
-              <p class="text-cloud-700 dark:text-cloud-300">
-                Time between updates in seconds (default: 3600).
-              </p>
+              <h5 class="font-medium text-cloud-900 dark:text-cloud-50">updateInterval: number</h5>
+              <p class="text-cloud-700 dark:text-cloud-300">Time between updates in seconds (default: 3600).</p>
+            </div>
+            <div>
+              <h5 class="font-medium text-cloud-900 dark:text-cloud-50">logLevel: 'debug' | 'info' | 'warn' | 'error'</h5>
+              <p class="text-cloud-700 dark:text-cloud-300">Logging level for the application (default: 'info').</p>
+            </div>
+            <div>
+              <h5 class="font-medium text-cloud-900 dark:text-cloud-50">retryAttempts: number</h5>
+              <p class="text-cloud-700 dark:text-cloud-300">Number of retry attempts for failed API calls (default: 3).</p>
+            </div>
+            <div>
+              <h5 class="font-medium text-cloud-900 dark:text-cloud-50">timeout: number</h5>
+              <p class="text-cloud-700 dark:text-cloud-300">API request timeout in milliseconds (default: 5000).</p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- Data Visualization -->
     <section class="mb-16">
-      <h2 class="text-2xl font-bold mb-6 text-cloud-900 dark:text-cloud-50">
-        Database Schema
-      </h2>
-
+      <h2 class="text-2xl font-bold mb-6 text-cloud-900 dark:text-cloud-50">Data Visualization</h2>
       <div class="bg-white dark:bg-cloud-800 rounded-lg shadow-md p-6">
-        <h3 class="text-xl font-medium mb-4 text-cloud-900 dark:text-cloud-50">
-          Tables
-        </h3>
+        <p class="mb-6 text-cloud-700 dark:text-cloud-300">
+          The Weather ETL Pipeline includes built-in visualization components for displaying weather data:
+        </p>
 
-        <div class="space-y-6">
-          <div>
-            <h4 class="text-lg font-medium mb-2 text-cloud-900 dark:text-cloud-50">weather_locations</h4>
-            <CodeBlock language="sql">
-CREATE TABLE weather_locations (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    city_id INTEGER NOT NULL,
-    name TEXT NOT NULL,
-    country TEXT NOT NULL,
-    latitude FLOAT NOT NULL,
-    longitude FLOAT NOT NULL,
-    created_at TIMESTAMPTZ DEFAULT now(),
-    active BOOLEAN DEFAULT true
-);
-            </CodeBlock>
-          </div>
-
-          <div>
-            <h4 class="text-lg font-medium mb-2 text-cloud-900 dark:text-cloud-50">weather_data</h4>
-            <CodeBlock language="sql">
-CREATE TABLE weather_data (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    location_id UUID REFERENCES weather_locations(id),
-    timestamp TIMESTAMPTZ NOT NULL,
-    temperature FLOAT NOT NULL,
-    feels_like FLOAT,
-    humidity INTEGER,
-    pressure INTEGER,
-    wind_speed FLOAT,
-    wind_direction INTEGER,
-    weather_main TEXT,
-    weather_description TEXT,
-    collected_at TIMESTAMPTZ DEFAULT now()
-);
-            </CodeBlock>
-          </div>
+        <div class="mb-8">
+          <WeatherChart client:load />
         </div>
+
+        <h3 class="text-xl font-medium mb-4 text-cloud-900 dark:text-cloud-50">Usage</h3>
+        <CodeBlock language="typescript">
+{`import { WeatherChart } from 'weather-etl/charts';
+
+const chart = new WeatherChart({
+  container: '#chart',
+  theme: 'light',
+  animate: true
+});
+
+await chart.loadData('London,UK');`}
+        </CodeBlock>
       </div>
     </section>
   </div>
